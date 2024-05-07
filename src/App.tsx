@@ -5,6 +5,9 @@ import {
 } from './util/storage.ts';
 import { useEffect, useState } from 'react';
 import { TimerList } from './components/TimerList.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
     const [clockworkToken, setClockworkToken] = useState<string>();
@@ -23,17 +26,19 @@ function App() {
     };
 
     return (
-        <div
-            className={
-                'flex flex-col justify-center items-center h-screen min-w-64'
-            }
-        >
-            {clockworkToken ? (
-                <TimerList clockworkToken={clockworkToken} />
-            ) : (
-                <TokenInput />
-            )}
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <div
+                className={
+                    'flex flex-col justify-center items-center h-screen min-w-64'
+                }
+            >
+                {clockworkToken ? (
+                    <TimerList clockworkToken={clockworkToken} />
+                ) : (
+                    <TokenInput />
+                )}
+            </div>
+        </QueryClientProvider>
     );
 }
 
