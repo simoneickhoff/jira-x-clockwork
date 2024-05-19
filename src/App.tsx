@@ -1,8 +1,5 @@
 import { TokenInput } from './components/TokenInput.tsx';
-import {
-    getClockworkToken,
-    watchClockworkTokenChanges,
-} from './util/storage.ts';
+import { getClockworkToken, watchClockworkTokenChanges } from './util/storage.ts';
 import { useEffect, useState } from 'react';
 import { TimerList } from './components/TimerList.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,17 +24,7 @@ function App() {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <div
-                className={
-                    'flex flex-col justify-center items-center h-screen min-w-64'
-                }
-            >
-                {clockworkToken ? (
-                    <TimerList clockworkToken={clockworkToken} />
-                ) : (
-                    <TokenInput />
-                )}
-            </div>
+            <div>{clockworkToken ? <TimerList clockworkToken={clockworkToken} /> : <TokenInput />}</div>
         </QueryClientProvider>
     );
 }

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { deleteClockworkToken } from '../util/storage.ts';
+import { Worklog } from '../types/Worklog.ts';
 
 interface TimerListProps {
     clockworkToken: string;
@@ -8,7 +9,7 @@ interface TimerListProps {
 const TimerList = ({ clockworkToken }: TimerListProps) => {
     const { data, isLoading, error } = useQuery({
         queryKey: ['getTimers'],
-        queryFn: async () => {
+        queryFn: async (): Promise<Worklog[]> => {
             const data = new URLSearchParams();
 
             data.set('user-query', 'simon.eickhoff@ontavio.de');
@@ -43,11 +44,21 @@ const TimerList = ({ clockworkToken }: TimerListProps) => {
     console.log(data);
 
     return (
-        <div>
+        <div className={'flex flex-col justify-center items-center min-w-64 text-gray-900'}>
             <h1>TimerList</h1>
-            <strong>{clockworkToken}</strong>
             <button onClick={deleteClockworkToken}>Delete Token</button>
-            {JSON.stringify(data)}
+            {data?.map((worklog: Worklog) => {
+                return (
+                    <div className={'flex justify-between border-b p-2 w-full'}>
+                        <div>
+                            <div className={'text-xl'}>{worklog.issue.key}</div>
+                            <div>{worklog.issue.fields.summary}</div>
+                        </div>
+
+                        <div>{worklog.timeSpent}</div>
+                    </div>
+                );
+            })}
         </div>
     );
 };
